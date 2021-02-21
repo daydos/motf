@@ -1,0 +1,15 @@
+{
+  "name": "motf",
+  "version": "1.0.0",
+  "description": "PoC for Mirror on the Fly attack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dogan Aydos & Gokhan Muharremoglu",
+  "license": "GNU GPLv3",
+  "dependencies": {
+    "puppeteer": "^7.1.0",
+    "websocket": "^1.0.33"
+  }
+}

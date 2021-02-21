@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MotF PoC</title>
+    <style>
+        #bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            min-width: 100%;
+            min-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="" id="bg">
+</body>
+<script>
+    const img = document.querySelector('img');
+
+    const ws = new WebSocket('ws://localhost:8080/');
+
+    ws.onopen = function () {
+        ws.send(JSON.stringify({
+            command: 'start',
+            args: {
+                height: window.innerHeight,
+                width: window.innerWidth
+            }
+        }));
+    };
+
+    ws.onmessage = function (e) {
+        const msg = JSON.parse(e.data);
+
+        switch (msg.command) {
+            case 'update':
+                img.src = 'data:image/png;base64, ' + msg.data;
+                break;
+            case 'loaded':
+                document.title = msg.data;
+                break;
+        }
+    };
+
+    function sendEvent(e) {
+        console.log(e);
+        ws.send(JSON.stringify({
+            command: 'event',
+            args: {
+                event: {
+                    type: e.type,
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    key: e.key,
+                }
+            }
+        }));
+    }
+
+    document.addEventListener('mousemove', sendEvent);
+    document.addEventListener('mouseup', sendEvent);
+    document.addEventListener('keyup', sendEvent);
+</script>
+
+</html>
